@@ -55,6 +55,7 @@ Shows times up to 90 minutes after the main pending refresh.
 - You need to click "Begin" for audio to work (browser security thing)
 - The file works completely offline once you have it
 - Bookmark it for easy access (don't change the file location after saving bookmark)
+- Only tracks one feeding 'cycle' at a time per browser.  If you want to track minis, open multiple browser tabs.
 
 ## Issues?
 
