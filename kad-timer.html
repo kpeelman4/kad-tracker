@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadoatery Timer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background: #f5f1e8;
+            min-height: 100vh;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #5c1a1a;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(92, 26, 26, 0.2);
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #5c1a1a;
+            margin: 0;
+        }
+
+        .header-nst {
+            font-size: 14px;
+            letter-spacing: 2px;
+            color: #5c1a1a;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .input-section {
+            text-align: center;
+            margin-bottom: 60px;
+            margin-top: 40px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            font-size: 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #5c1a1a;
+            font-weight: 400;
+        }
+
+        input[type="time"] {
+            width: 200px;
+            padding: 12px 20px;
+            border: 1px solid #5c1a1a;
+            background: transparent;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            color: #5c1a1a;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        input[type="time"]:focus {
+            outline: 2px solid #5c1a1a;
+            outline-offset: 3px;
+        }
+
+        select {
+            width: 200px;
+            padding: 12px 20px;
+            border: 1px solid #5c1a1a;
+            background: transparent;
+            font-size: 14px;
+            font-family: 'Times New Roman', Times, serif;
+            color: #5c1a1a;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: 2px solid #5c1a1a;
+            outline-offset: 3px;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px 40px;
+            background: transparent;
+            color: #5c1a1a;
+            border: 1px solid #5c1a1a;
+            font-size: 12px;
+            font-family: 'Times New Roman', Times, serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #5c1a1a;
+            color: #f5f1e8;
+        }
+
+        .timer-display {
+            display: none;
+            text-align: center;
+        }
+
+        .timer-display.active {
+            display: block;
+        }
+
+        .refresh-info {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(92, 26, 26, 0.2);
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .refresh-label {
+            font-size: 13px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            color: #5c1a1a;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+
+        .refresh-time {
+            font-size: 48px;
+            font-family: 'Times New Roman', Times, serif;
+            font-weight: 400;
+            letter-spacing: -1px;
+            margin-bottom: 25px;
+            color: #5c1a1a;
+            text-align: center;
+        }
+
+        .last-refresh {
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(92, 26, 26, 0.15);
+        }
+
+        .countdown {
+            font-size: 72px;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 20px 0 0 0;
+            opacity: 1;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -1px;
+            color: #5c1a1a;
+            font-weight: 400;
+            text-align: center;
+        }
+
+        .upcoming-times {
+            margin-top: 50px;
+            padding: 30px;
+            padding-top: 40px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(92, 26, 26, 0.2);
+        }
+
+        .upcoming-times h2 {
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            color: #5c1a1a;
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .time-item {
+            font-size: 32px;
+            font-family: 'Times New Roman', Times, serif;
+            margin: 15px 0;
+            opacity: 0.4;
+            transition: all 0.3s;
+            padding: 8px 0;
+            text-align: center;
+            font-weight: 400;
+            color: #5c1a1a;
+        }
+
+        .time-item.active {
+            opacity: 1;
+            font-weight: 400;
+            background: rgba(92, 26, 26, 0.15);
+            padding: 12px 0;
+        }
+
+        .kad-link {
+            display: inline-block;
+            margin-top: 40px;
+            padding: 12px 30px;
+            border: 1px solid #5c1a1a;
+            color: #5c1a1a;
+            text-decoration: none;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .kad-link:hover {
+            background: #5c1a1a;
+            color: #f5f1e8;
+        }
+
+        .stop-btn {
+            margin-top: 50px;
+            background: transparent;
+            border: 1px solid rgba(92, 26, 26, 0.3);
+            color: rgba(92, 26, 26, 0.5);
+        }
+
+        .stop-btn:hover {
+            background: #5c1a1a;
+            color: #f5f1e8;
+            border-color: #5c1a1a;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+
+            h1 {
+                font-size: 16px;
+            }
+
+            .header-nst {
+                font-size: 12px;
+            }
+
+            .refresh-time {
+                font-size: 36px;
+            }
+
+            .countdown {
+                font-size: 56px;
+            }
+
+            .time-item {
+                font-size: 26px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Kadoatery Timekeeping</h1>
+            <div class="header-nst" id="headerNST">00:00:00 PM NST</div>
+        </div>
+
+        <div class="input-section">
+            <label for="lastRefresh">Last Refresh Time</label>
+            <input type="time" id="lastRefresh" step="1">
+            <br>
+            <label for="alarmSound" style="margin-top: 20px;">Alarm Sound</label>
+            <select id="alarmSound">
+                <option value="beep">Soft Beeps (Default)</option>
+                <option value="loud">Loud Alert</option>
+                <option value="buzzer">Buzzer</option>
+                <option value="chime">Chimes</option>
+                <option value="siren">Siren</option>
+            </select>
+            <br>
+            <button onclick="startTimer()">Begin</button>
+        </div>
+
+        <div class="timer-display" id="timerDisplay">
+            <div class="refresh-info">
+                <div class="last-refresh">
+                    <div class="refresh-label">Last Refresh</div>
+                    <div class="refresh-time" id="lastRefreshDisplay">—</div>
+                </div>
+                <div class="next-refresh-section">
+                    <div class="refresh-label">Next Possible Refresh</div>
+                    <div class="refresh-time" id="nextRefresh">—</div>
+                </div>
+            </div>
+
+            <div class="refresh-info" style="margin-top: 20px;">
+                <div class="refresh-label">Countdown to Next Possible Refresh</div>
+                <div class="countdown" id="countdown">—</div>
+            </div>
+
+            <a href="https://www.neopets.com/games/kadoatery/index.phtml" target="_blank" class="kad-link">Kadoatery</a>
+
+            <button onclick="copyBoardPost()" style="margin-top: 20px; margin-left: 10px;">Copy for Board</button>
+
+            <div class="upcoming-times">
+                <h2>All Refresh Times</h2>
+                <div id="upcomingList"></div>
+            </div>
+
+            <button class="stop-btn" onclick="stopTimer()">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        let timerInterval;
+        let audioContext;
+        let hasAlerted = false;
+        let allRefreshTimes = [];
+        let currentRefreshIndex = 0;
+        let lastRefreshTime = null;
+
+        function startTimer() {
+            const lastRefreshInput = document.getElementById('lastRefresh').value;
+            if (!lastRefreshInput) {
+                alert('Please enter the last refresh time');
+                return;
+            }
+
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+
+            const [hours, minutes, seconds] = lastRefreshInput.split(':').map(Number);
+            
+            // Store last refresh time
+            lastRefreshTime = new Date(2000, 0, 1, hours, minutes, seconds || 0);
+            
+            // Calculate all 10 refresh times
+            allRefreshTimes = [];
+            let currentTime = new Date(lastRefreshTime);
+            
+            // First refresh is +35 minutes
+            currentTime = new Date(currentTime.getTime() + 35 * 60 * 1000);
+            allRefreshTimes.push(new Date(currentTime));
+            
+            // Next 9 refreshes are +7 minutes each
+            for (let i = 0; i < 9; i++) {
+                currentTime = new Date(currentTime.getTime() + 7 * 60 * 1000);
+                allRefreshTimes.push(new Date(currentTime));
+            }
+
+            currentRefreshIndex = 0;
+            hasAlerted = false;
+
+            document.getElementById('timerDisplay').classList.add('active');
+            document.querySelector('.input-section').style.display = 'none';
+
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 100);
+        }
+
+        function updateTimer() {
+            // Get current Pacific Time (NST)
+            const now = new Date();
+            const pacificTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
+            
+            // Create comparable time using same base date
+            const nstTime = new Date(2000, 0, 1);
+            nstTime.setHours(pacificTime.getHours(), pacificTime.getMinutes(), pacificTime.getSeconds(), pacificTime.getMilliseconds());
+
+            // Update NST clock with CURRENT time (in header only)
+            const nstDisplay = formatTime(nstTime) + ' NST';
+            document.getElementById('headerNST').textContent = nstDisplay;
+
+            // Display last refresh time
+            document.getElementById('lastRefreshDisplay').textContent = formatTime(lastRefreshTime);
+
+            // Find NEXT upcoming refresh and detect window changes
+            let nextRefresh = null;
+            let previousWindowIndex = currentRefreshIndex;
+            for (let i = 0; i < allRefreshTimes.length; i++) {
+                if (allRefreshTimes[i] > nstTime) {
+                    nextRefresh = allRefreshTimes[i];
+                    currentRefreshIndex = i;
+                    break;
+                }
+            }
+
+            // Reset alarm if we moved to a new window
+            if (previousWindowIndex !== currentRefreshIndex) {
+                hasAlerted = false;
+            }
+
+            // If we've passed all times, show the last one
+            if (!nextRefresh) {
+                nextRefresh = allRefreshTimes[allRefreshTimes.length - 1];
+                currentRefreshIndex = allRefreshTimes.length - 1;
+            }
+            
+            // Show NEXT refresh time
+            document.getElementById('nextRefresh').textContent = formatTime(nextRefresh);
+
+            // Calculate countdown to NEXT refresh
+            const timeUntil = nextRefresh.getTime() - nstTime.getTime();
+            
+            if (timeUntil > 0) {
+                const totalSeconds = Math.floor(timeUntil / 1000);
+                const minutes = Math.floor(totalSeconds / 60);
+                const seconds = totalSeconds % 60;
+                const countdownText = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                document.getElementById('countdown').textContent = countdownText;
+                
+                // Update page title with countdown
+                document.title = `${countdownText} - Kad Timer`;
+                
+                // Alert at 30 seconds before
+                if (timeUntil <= 30000 && timeUntil > 25000 && !hasAlerted) {
+                    triggerAlarm();
+                    hasAlerted = true;
+                }
+            } else if (timeUntil > -90000) {
+                document.getElementById('countdown').textContent = 'REFRESH NOW!';
+                document.title = 'REFRESH NOW! - Kad Timer';
+            } else {
+                // Move to next refresh
+                if (currentRefreshIndex < allRefreshTimes.length - 1) {
+                    currentRefreshIndex++;
+                    hasAlerted = false;
+                }
+                document.getElementById('countdown').textContent = 'Window Closed';
+                document.title = 'Window Closed - Kad Timer';
+            }
+
+            // Update upcoming list
+            updateUpcomingList(nstTime);
+        }
+
+        function updateUpcomingList(currentNST) {
+            const list = document.getElementById('upcomingList');
+            list.innerHTML = '';
+
+            allRefreshTimes.forEach((time, index) => {
+                const item = document.createElement('div');
+                item.className = 'time-item';
+                if (index === currentRefreshIndex) {
+                    item.classList.add('active');
+                }
+                item.textContent = formatTime(time);
+                list.appendChild(item);
+            });
+        }
+
+        function triggerAlarm() {
+            playAlarmSound();
+            
+            if ('vibrate' in navigator) {
+                navigator.vibrate([200, 100, 200]);
+            }
+        }
+
+        function playAlarmSound() {
+            if (!audioContext) return;
+
+            const soundType = document.getElementById('alarmSound').value;
+
+            switch(soundType) {
+                case 'beep':
+                    // Original soft beeps
+                    playBeep(800, 0.3, 0.4);
+                    setTimeout(() => playBeep(1000, 0.3, 0.4), 250);
+                    break;
+                
+                case 'loud':
+                    // Loud alert - higher volume and longer
+                    playBeep(900, 0.6, 0.6);
+                    setTimeout(() => playBeep(1100, 0.6, 0.6), 300);
+                    setTimeout(() => playBeep(1300, 0.6, 0.6), 600);
+                    break;
+                
+                case 'buzzer':
+                    // Buzzer - square wave for harsh sound
+                    playBuzzer(400, 0.5, 0.8);
+                    break;
+                
+                case 'chime':
+                    // Pleasant chimes - ascending tones
+                    playBeep(523.25, 0.4, 0.5); // C
+                    setTimeout(() => playBeep(659.25, 0.4, 0.5), 200); // E
+                    setTimeout(() => playBeep(783.99, 0.4, 0.5), 400); // G
+                    break;
+                
+                case 'siren':
+                    // Siren - alternating tones
+                    for (let i = 0; i < 4; i++) {
+                        setTimeout(() => playBeep(800, 0.5, 0.2), i * 200);
+                        setTimeout(() => playBeep(600, 0.5, 0.2), i * 200 + 100);
+                    }
+                    break;
+            }
+        }
+
+        function playBeep(frequency, volume, duration) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function playBuzzer(frequency, volume, duration) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'square'; // Square wave for buzzer sound
+
+            gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+
+        function formatTime(date) {
+            let h = date.getHours();
+            const m = date.getMinutes().toString().padStart(2, '0');
+            const s = date.getSeconds().toString().padStart(2, '0');
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            h = h % 12;
+            h = h ? h : 12;
+            return `${h}:${m}:${s} ${ampm}`;
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('timerDisplay').classList.remove('active');
+            document.querySelector('.input-section').style.display = 'block';
+            document.getElementById('lastRefresh').value = '';
+            hasAlerted = false;
+            currentRefreshIndex = 0;
+            allRefreshTimes = [];
+        }
+
+        function copyBoardPost() {
+            // Format last refresh time
+            const lastRfText = formatTime(lastRefreshTime);
+            
+            // Get main pending times (first one is at +35 min)
+            const mainStart = allRefreshTimes[0];
+            const mainStartPlus90 = new Date(mainStart.getTime() + 90 * 60 * 1000);
+            
+            // Collect all times within 90 minutes of main
+            const pendingTimes = [];
+            let currentHour = -1;
+            
+            for (let time of allRefreshTimes) {
+                if (time <= mainStartPlus90) {
+                    const hour = time.getHours();
+                    const minute = time.getMinutes().toString().padStart(2, '0');
+                    
+                    // If we've entered a new hour, show the full hour:minute
+                    if (hour !== currentHour) {
+                        const displayHour = hour % 12 || 12;
+                        pendingTimes.push(`${displayHour}:${minute}`);
+                        currentHour = hour;
+                    } else {
+                        // Same hour, just show :minute
+                        pendingTimes.push(`:${minute}`);
+                    }
+                }
+            }
+            
+            // Build the post
+            const boardPost = `last rf @ ${lastRfText}\n\nmain pending rf @ ${pendingTimes.join(', ')}`;
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(boardPost).then(() => {
+                alert('Copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy: ' + err);
+            });
+        }
+
+        // Wake lock
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                }
+            } catch (err) {}
+        }
+
+        document.getElementById('lastRefresh').addEventListener('focus', requestWakeLock);
+    </script>
+</body>
+</html>
