@@ -4,7 +4,7 @@ A simple timer for tracking Neopets Kadoatery refresh windows.
 
 ## Credit
 
-**This entire project was created by Claude (Anthropic's AI assistant).** The human user provided feedback on design preferences and functionality requests. All code, styling, and features were written by AI.
+**This entire project was created by Claude (Anthropic's AI assistant).** I provided feedback on design preferences and functionality requests. All code, styling, and features were written by AI.
 
 ## Features
 
