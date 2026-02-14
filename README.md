@@ -64,6 +64,8 @@ If the alarm doesn't sound, make sure:
 2. You clicked "Begin" (can't play sound without user interaction)
 3. Your volume is up
 
+This repo will not be updated. Feel free to use and adjust as you see fit for your own kadding needs!  No need to credit me, but I suggest you credit AI if sharing with the broader community. 
+
 ---
 
 **Again, all credit to Claude AI.** This was an iterative design process where Claude wrote all the code based on user feedback about colors, layout, and features.
